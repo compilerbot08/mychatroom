@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+</head>
+<body>
+    <div class="home-container">
+        <h1>Welcome to the Chat Application</h1>
+        <form id="usernameForm">
+            <input id="usernameInput" type="text" placeholder="Enter your username" required />
+            <button type="submit">Enter Chatroom</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('usernameForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var username = document.getElementById('usernameInput').value;
+            if (username.trim() !== '') {
+                window.location.href = '/chatroom?username=' + encodeURIComponent(username);
+            }
+        });
+    </script>
+</body>
+</html>

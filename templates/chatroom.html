@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="chatroom-container">
+        <h1>Chat Room</h1>
+        <div id="chat-box">
+            <ul id="messages"></ul>
+        </div>
+        <div id="message-input">
+            <input id="messageInput" autocomplete="off" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+            <button onclick="leaveChatroom()">Leave Chatroom</button>
+        </div>
+    </div>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <script>
+        var socket = io();
+        var username = "{{ username }}";
+
+        socket.on('response', function(data) {
+            var item = document.createElement('li');
+            item.textContent = data.msg;
+            item.className = 'message-item';
+            document.getElementById('messages').appendChild(item);
+            document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+            item.classList.add('fadeIn');
+        });
+
+        function sendMessage() {
+            var input = document.getElementById('messageInput');
+            var message = input.value;
+            if (message.trim() !== '') {
+                socket.send({username: username, msg: message});
+                input.value = '';
+            }
+        }
+
+        function leaveChatroom() {
+            socket.disconnect();
+            window.location.href = '/'; // Redirect to home page
+        }
+    </script>
+</body>
+</html>
